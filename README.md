@@ -1,5 +1,6 @@
 Phpactor Hub
-==================
+============
 
-[![Build Status](https://travis-ci.org/phpactor/phpactor-hub.svg?branch=master)](https://travis-ci.org/phpactor/phpactor-hub)
-[![StyleCI](https://styleci.io/repos/<repo-id>/shield)](https://styleci.io/repos/<repo-id>)
+Repository which uses [maestro](https://github.com/dantleech/maestro2) to
+automate Phpactor repository maintainence.
+
