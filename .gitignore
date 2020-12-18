@@ -1,5 +1,3 @@
 /vendor
-/tests/Workspace
 /composer.lock
-/.php_cs.cache
-/.phpunit.result.cache
+/workspace
