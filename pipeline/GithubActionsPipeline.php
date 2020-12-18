@@ -20,9 +20,16 @@ class GithubActionsPipeline extends BasePipeline
     protected function buildRepository(RepositoryNode $repository): Task
     {
         return new SequentialTask([
-            new CatTask(
-                path: '.travis.yml'
+            new TemplateTask(
+                template: 'README.md.twig',
+                target: "README.md",
+                vars: [
+                    'repo' => $repository,
+                ]
             ),
+            //new CatTask(
+            //    path: '.travis.yml'
+            //),
             new FileTask(
                 path: '.travis.yml',
                 exists: false
@@ -36,13 +43,17 @@ class GithubActionsPipeline extends BasePipeline
             new TemplateTask(
                 template: 'github/workflow.yml.twig',
                 target: '.github/workflows/ci.yml',
+                overwrite: true,
                 vars: [
                     'name' => 'CI',
                     'repo' => $repository,
                     'jobs' => $repository->vars()->get('jobs')
                 ]
             ),
-            new GitDiffTask(),
+            new CatTask(
+                path: '.github/workflows/ci.yml'
+            ),
+            //new GitDiffTask(),
             new GitCommitTask(
                 message: 'Maestro is adding Github Actions',
                 paths: [

@@ -16,7 +16,15 @@
     "repositories": [
         {
             "name": "phpactor",
-            "url": "git@github.com:phpactor/phpactor"
+            "url": "git@github.com:phpactor/phpactor",
+            "vars": {
+                "jobs": [
+                    "phpactor-vim",
+                    "phpunit",
+                    "phpactor-deps-and-exts",
+                    "phpactor-docs"
+                ]
+            }
         },
         {
             "name": "amp-fswatch",
@@ -116,7 +124,13 @@
         },
         {
             "name": "language-server-protocol",
-            "url": "git@github.com:phpactor/language-server-protocol"
+            "url": "git@github.com:phpactor/language-server-protocol",
+            "vars": {
+                "jobs": [
+                    "phpstan",
+                    "phpunit"
+                ]
+            }
         },
         {
             "name": "logging-extension",
