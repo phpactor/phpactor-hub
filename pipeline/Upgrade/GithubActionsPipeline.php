@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpactorHub\Pipeline;
+namespace PhpactorHub\Pipeline\Upgrade;
 
-use Maestro2\Core\Config\RepositoryNode;
+use Maestro2\Core\Inventory\RepositoryNode;
 use Maestro2\Core\Task\CatTask;
 use Maestro2\Core\Task\ClosureTask;
 use Maestro2\Core\Task\FileTask;
@@ -14,6 +14,7 @@ use Maestro2\Core\Task\SequentialTask;
 use Maestro2\Core\Task\Task;
 use Maestro2\Core\Task\TemplateTask;
 use Maestro2\Core\Task\YamlTask;
+use PhpactorHub\Pipeline\BasePipeline;
 
 class GithubActionsPipeline extends BasePipeline
 {
@@ -47,7 +48,8 @@ class GithubActionsPipeline extends BasePipeline
                 vars: [
                     'name' => 'CI',
                     'repo' => $repository,
-                    'jobs' => $repository->vars()->get('jobs')
+                    'jobs' => $repository->vars()->get('jobs'),
+                    'branches' => $repository->vars()->get('branches'),
                 ]
             ),
             new CatTask(
@@ -59,19 +61,19 @@ class GithubActionsPipeline extends BasePipeline
                 paths: [
                     'README.md',
                     '.github/workflows/ci.yml',
-                    '.travis.yml',
+                    //'.travis.yml',
                 ],
             ),
             new ProcessTask(
                 args: ['git', 'checkout', '-b', 'github-actions'],
             ),
-            new ProcessTask(
-                args: ['git', 'push', 'origin', 'HEAD', '--force'],
-            ),
-            new ProcessTask(
-                args: ['gh', 'pr', 'create', '--fill', '--head', 'github-actions'],
-                allowFailure: true
-            )
+            //new ProcessTask(
+            //    args: ['git', 'push', 'origin', 'HEAD', '--force'],
+            //),
+            //new ProcessTask(
+            //    args: ['gh', 'pr', 'create', '--fill', '--head', 'github-actions'],
+            //    allowFailure: true
+            //)
         ]);
 
     }

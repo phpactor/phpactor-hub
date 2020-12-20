@@ -1,18 +1,20 @@
 <?php
 
-namespace PhpactorHub\Pipeline;
+namespace PhpactorHub\Pipeline\Upgrade;
 
-use Maestro2\Core\Config\RepositoryNode;
+use Maestro2\Core\Inventory\RepositoryNode;
 use Maestro2\Core\Process\ProcessResult;
 use Maestro2\Core\Task\ComposerTask;
 use Maestro2\Core\Task\ConditionalTask;
 use Maestro2\Core\Task\Context;
 use Maestro2\Core\Task\GitCommitTask;
 use Maestro2\Core\Task\GitDiffTask;
+use Maestro2\Core\Task\PhpProcessTask;
 use Maestro2\Core\Task\ProcessTask;
 use Maestro2\Core\Task\SequentialTask;
 use Maestro2\Core\Task\Task;
 use Maestro2\Core\Task\YamlTask;
+use PhpactorHub\Pipeline\BasePipeline;
 
 class UpgradePhpStanPipeline extends BasePipeline
 {
@@ -47,9 +49,11 @@ class UpgradePhpStanPipeline extends BasePipeline
                 paths: [
                     'composer.json',
                     'phpstan.neon',
+                    'phpstan-baseline.neon',
                 ],
                 message: sprintf('Maestro updates PHPStan to version %s', self::VERSION)
             ),
+            new ProcessTask(['git', 'push', 'origin', 'HEAD']),
         ]);
     }
 
@@ -60,7 +64,8 @@ class UpgradePhpStanPipeline extends BasePipeline
             $config = $this->processIncludes($config);
         }
 
-        $config['parameters']['paths'] = ['lib'];
+        unset($config['parameters']['ignoreErrors']);
+        $config['parameters']['paths'] = array_unique(array_merge($config['parameters']['paths'] ?? [], ['lib']));
 
         return $config;
     }
@@ -85,9 +90,8 @@ class UpgradePhpStanPipeline extends BasePipeline
 
     private function phpstanTask(RepositoryNode $repository, bool $allowFailure = false)
     {
-        return new ProcessTask(
-            args: [
-                $repository->main()->php()->phpBin(),
+        return new PhpProcessTask(
+            cmd: [
                 './vendor/bin/phpstan',
                 '--no-interaction',
                 'analyse',
@@ -102,9 +106,8 @@ class UpgradePhpStanPipeline extends BasePipeline
     private function generateBaselineTask(RepositoryNode $repository): Task
     {
         return new SequentialTask([
-            new ProcessTask(
-                args: [
-                    $repository->main()->php()->phpBin(),
+            new PhpProcessTask(
+                cmd: [
                     './vendor/bin/phpstan',
                     'analyse',
                     '--generate-baseline'
@@ -129,12 +132,6 @@ class UpgradePhpStanPipeline extends BasePipeline
                 },
             ),
             $this->phpstanTask($repository),
-            new GitCommitTask(
-                paths: [
-                    'phpstan-baseline.neon',
-                ],
-                message: sprintf('Maestro adds PHPStan baseline')
-            ),
         ]);
     }
 }
