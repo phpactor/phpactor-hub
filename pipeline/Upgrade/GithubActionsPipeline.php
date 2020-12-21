@@ -2,18 +2,18 @@
 
 namespace PhpactorHub\Pipeline\Upgrade;
 
-use Maestro2\Core\Inventory\RepositoryNode;
-use Maestro2\Core\Task\CatTask;
-use Maestro2\Core\Task\ClosureTask;
-use Maestro2\Core\Task\FileTask;
-use Maestro2\Core\Task\GitCommitTask;
-use Maestro2\Core\Task\GitDiffTask;
-use Maestro2\Core\Task\ProcessTask;
-use Maestro2\Core\Task\ReplaceLineTask;
-use Maestro2\Core\Task\SequentialTask;
-use Maestro2\Core\Task\Task;
-use Maestro2\Core\Task\TemplateTask;
-use Maestro2\Core\Task\YamlTask;
+use Maestro\Core\Inventory\RepositoryNode;
+use Maestro\Core\Task\CatTask;
+use Maestro\Core\Task\ClosureTask;
+use Maestro\Core\Task\FileTask;
+use Maestro\Core\Task\GitCommitTask;
+use Maestro\Core\Task\GitDiffTask;
+use Maestro\Core\Task\ProcessTask;
+use Maestro\Core\Task\ReplaceLineTask;
+use Maestro\Core\Task\SequentialTask;
+use Maestro\Core\Task\Task;
+use Maestro\Core\Task\TemplateTask;
+use Maestro\Core\Task\YamlTask;
 use PhpactorHub\Pipeline\BasePipeline;
 
 class GithubActionsPipeline extends BasePipeline

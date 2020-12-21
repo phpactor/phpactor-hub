@@ -2,18 +2,18 @@
 
 namespace PhpactorHub\Pipeline\Upgrade;
 
-use Maestro2\Core\Inventory\RepositoryNode;
-use Maestro2\Core\Process\ProcessResult;
-use Maestro2\Core\Task\ComposerTask;
-use Maestro2\Core\Task\ConditionalTask;
-use Maestro2\Core\Task\Context;
-use Maestro2\Core\Task\GitCommitTask;
-use Maestro2\Core\Task\GitDiffTask;
-use Maestro2\Core\Task\PhpProcessTask;
-use Maestro2\Core\Task\ProcessTask;
-use Maestro2\Core\Task\SequentialTask;
-use Maestro2\Core\Task\Task;
-use Maestro2\Core\Task\YamlTask;
+use Maestro\Core\Inventory\RepositoryNode;
+use Maestro\Core\Process\ProcessResult;
+use Maestro\Core\Task\ComposerTask;
+use Maestro\Core\Task\ConditionalTask;
+use Maestro\Core\Task\Context;
+use Maestro\Core\Task\GitCommitTask;
+use Maestro\Core\Task\GitDiffTask;
+use Maestro\Core\Task\PhpProcessTask;
+use Maestro\Core\Task\ProcessTask;
+use Maestro\Core\Task\SequentialTask;
+use Maestro\Core\Task\Task;
+use Maestro\Core\Task\YamlTask;
 use PhpactorHub\Pipeline\BasePipeline;
 
 class UpgradePhpStanPipeline extends BasePipeline

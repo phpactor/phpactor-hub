@@ -2,11 +2,11 @@
 
 namespace PhpactorHub\Pipeline;
 
-use Maestro2\Core\Inventory\RepositoryNode;
-use Maestro2\Core\Task\GitSurveyTask;
-use Maestro2\Core\Task\JsonApiSurveyTask;
-use Maestro2\Core\Task\ParallelTask;
-use Maestro2\Core\Task\Task;
+use Maestro\Core\Inventory\RepositoryNode;
+use Maestro\Core\Task\GitSurveyTask;
+use Maestro\Core\Task\JsonApiSurveyTask;
+use Maestro\Core\Task\ParallelTask;
+use Maestro\Core\Task\Task;
 
 class SurveyPipeline extends BasePipeline
 {
