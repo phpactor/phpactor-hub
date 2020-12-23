@@ -4,6 +4,7 @@
             "name": "phpactor",
             "url": "git@github.com:phpactor/phpactor",
             "vars": {
+                "composerLock": true,
                 "defaultBranch": "develop",
                 "branches": [
                     "master",
@@ -47,7 +48,12 @@
         },
         {
             "name": "completion",
-            "url": "git@github.com:phpactor/completion"
+            "url": "git@github.com:phpactor/completion",
+            "vars": {
+                "checkoutOptions": {
+                    "fetch-depth": 0
+                }
+            }
         },
         {
             "name": "completion-extension",

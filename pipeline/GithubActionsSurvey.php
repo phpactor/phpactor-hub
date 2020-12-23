@@ -23,7 +23,7 @@ class GithubActionsSurvey implements Pipeline
             ], [
                 new GithubActionSurveyTask(
                     repo: 'phpactor/' . $repositoryNode->name(),
-                    defaultBranch: $repositoryNode->vars()->get('defaultBranch'),
+                    defaultBranch: $repositoryNode->vars()->get('branch'),
                     githubUsername: $repositoryNode->vars()->get('secret.githubUsername'),
                     githubAuthToken: $repositoryNode->vars()->get('secret.githubAuthToken'),
                 )

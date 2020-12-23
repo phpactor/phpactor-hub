@@ -1,0 +1,9 @@
+            -
+                name: "Checkout code"
+                uses: "actions/checkout@v2"
+{% if checkoutOptions|length %}
+                with:
+{% endif %}
+{% for optName, optValue in checkoutOptions %}
+                    {{ optName }}: {{ optValue }}
+{% endfor %}

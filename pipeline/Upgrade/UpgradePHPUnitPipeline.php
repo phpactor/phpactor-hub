@@ -2,7 +2,7 @@
 
 namespace PhpactorHub\Pipeline\Upgrade;
 
-use Maestro\Core\Task\ComposerTask;
+use Maestro\Composer\Task\ComposerTask;
 use Maestro\Core\Task\GitCommitTask;
 use Maestro\Core\Task\GitDiffTask;
 use Maestro\Core\Inventory\RepositoryNode;
@@ -19,37 +19,27 @@ class UpgradePHPUnitPipeline extends BasePipeline
         return new SequentialTask([
             new ComposerTask(
                 require: [
-                    'phpunit/phpunit' => '^8.0',
+                    'phpunit/phpunit' => '^9.0',
                 ],
                 dev: true,
                 update: false
             ),
-            new ProcessTask(
-                cmd: [
-                    'bash',
-                    '-c',
-                    <<<'EOT'
-find tests -type f -name '*.php' -print0 | xargs -0 sed -i '' -e 's/public function setUp()/protected function setUp(): void/g'
-EOT
-                ],
-                allowFailure: true
-            ),
             new GitDiffTask(),
             new ProcessTask(
-                cmd: 'git checkout -b phpunit-8-upgrade'
+                cmd: 'git checkout -b ' . $repository->vars()->get('branch')
             ),
             new GitCommitTask(
                 paths: [
                     'tests',
                     'composer.json',
                 ],
-                message: 'Maestro updates to PHPUnit 8.0'
+                message: 'Maestro updates PHPUnit'
             ),
             new ProcessTask(
                 cmd: 'git push origin HEAD -f',
             ),
             new ProcessTask(
-                cmd: 'gh pr create --fill -t "Maestro updates to PHPUnit 8.0"',
+                cmd: 'gh pr create --fill -t "Maestro updates PHPUnit"',
                 allowFailure: true
             ),
         ]);

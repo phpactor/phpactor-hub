@@ -30,6 +30,7 @@ class GithubWorkflowUpdateTask implements DelegateTask
                     'repo' => $this->repository,
                     'jobs' => $this->repository->vars()->get('jobs'),
                     'branches' => $this->repository->vars()->get('branches'),
+                    'checkoutOptions' => $this->repository->vars()->get('checkoutOptions'),
                 ]
             ),
         ]);

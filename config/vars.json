@@ -1,5 +1,7 @@
 {
     "vars": {
+        "composerLock": false,
+        "checkoutOptions": {},
         "defaultBranch": "master",
         "jobs": [
             "php-cs-fixer",

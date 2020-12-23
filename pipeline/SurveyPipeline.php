@@ -14,7 +14,9 @@ class SurveyPipeline extends BasePipeline
     {
         return new ParallelTask([
             new GitSurveyTask(),
-            new GithubActionSurveyTask(),
+            new GithubActionSurveyTask(
+                defaultBranch: $repository->vars()->get('branch'),
+            ),
         ]);
     }
 }

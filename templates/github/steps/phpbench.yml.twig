@@ -8,9 +8,7 @@
                 php-version:
                     - '7.3'
         steps:
-            -
-                name: "Checkout code"
-                uses: "actions/checkout@v2"
+{% include "github/steps/step/checkout-code.yml.twig" %}
 
             -
                 name: "Install PHP"

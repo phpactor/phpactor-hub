@@ -49,10 +49,10 @@ class GithubActionSurveyTask implements DelegateTask, Stringable
                     'gha.con' => (function (string $conclusion) {
                         return sprintf(
                             '<%s>%s</>',
-                            $conclusion === 'failure' ? 'error' : 'info',
+                            $conclusion === 'n/a' ? 'comment' : ($conclusion === 'failure' ? 'error' : 'info'),
                             $conclusion
                         );
-                    })($run['conclusion']),
+                    })($run['conclusion'] ?? 'n/a'),
                     'gha.url' => $run['html_url']
                 ];
             }
