@@ -1,12 +1,12 @@
 <?php
 
 namespace PhpactorHub\Pipeline;
-
-use Maestro\Core\Inventory\RepositoryNode;
+ Maestro\Core\Inventory\RepositoryNode;
 use Maestro\Core\Task\GitSurveyTask;
 use Maestro\Core\Task\JsonApiSurveyTask;
 use Maestro\Core\Task\ParallelTask;
 use Maestro\Core\Task\Task;
+use PhpactorHub\Pipeline\Task\GithubActionSurveyTask;
 
 class SurveyPipeline extends BasePipeline
 {
@@ -14,41 +14,7 @@ class SurveyPipeline extends BasePipeline
     {
         return new ParallelTask([
             new GitSurveyTask(),
-            $this->githubActionsSurvey($repository)
+            new GithubActionSurveyTask(),
         ]);
-    }
-
-    private function githubActionsSurvey(RepositoryNode $repository): Task
-    {
-        return new JsonApiSurveyTask(
-            url: sprintf(
-                'https://api.github.com/repos/%s/actions/runs?branch=%s',
-                'phpactor/' . $repository->name(),
-                $repository->vars()->get('defaultBranch')
-            ),
-            headers: [
-                'Accept' => 'application/vnd.github.v3+json',
-                'Authorization' => sprintf('Basic %s', base64_encode(sprintf(
-                    '%s:%s',
-                    $repository->vars()->get('secret.githubUsername'),
-                    $repository->vars()->get('secret.githubAuthToken'),
-                )))
-            ],
-            extract: function (array $data) {
-                $run = $data['workflow_runs'][0] ?? [];
-
-                if ([] === $run) {
-                    return [
-                        'gha.#' => 'n/a',
-                    ];
-                }
-
-                return [
-                    'gha.#' => $run['run_number'],
-                    'gha.sta' => $run['status'],
-                    'gha.con' => $run['conclusion'],
-                ];
-            }
-        );
     }
 }
