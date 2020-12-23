@@ -1,4 +1,4 @@
 /vendor
 /composer.lock
 /workspace
-/pipeline/secrets.json
+/config/secrets.json

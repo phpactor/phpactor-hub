@@ -5,8 +5,9 @@ namespace PhpactorHub\Pipeline\Task;
 use Maestro\Core\Task\DelegateTask;
 use Maestro\Core\Task\JsonApiSurveyTask;
 use Maestro\Core\Task\Task;
+use Stringable;
 
-class GithubActionSurveyTask implements DelegateTask
+class GithubActionSurveyTask implements DelegateTask, Stringable
 {
     public function __construct(
         private string $repo,
@@ -52,8 +53,17 @@ class GithubActionSurveyTask implements DelegateTask
                             $conclusion
                         );
                     })($run['conclusion']),
+                    'gha.url' => $run['html_url']
                 ];
             }
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString()
+    {
+        return sprintf('Getting github action status for "%s"', $this->repo);
     }
 }

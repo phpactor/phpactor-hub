@@ -1,0 +1,13 @@
+{
+    "vars": {
+        "defaultBranch": "master",
+        "jobs": [
+            "php-cs-fixer",
+            "phpstan",
+            "phpunit"
+        ],
+        "branches": [
+            "master"
+        ]
+    }
+}
