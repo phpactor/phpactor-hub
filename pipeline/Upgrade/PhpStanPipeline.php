@@ -16,7 +16,7 @@ use Maestro\Core\Task\Task;
 use Maestro\Core\Task\YamlTask;
 use PhpactorHub\Pipeline\BasePipeline;
 
-class UpgradePhpStanPipeline extends BasePipeline
+class PhpStanPipeline extends BasePipeline
 {
     const VERSION = '~0.12.0';
 

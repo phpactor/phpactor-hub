@@ -32,16 +32,20 @@ class ConfigurationPipeline extends BasePipeline
             ),
             new ComposerTask(
                 require: [
-                    'php' => '^7.3',
+                    'php' => $repository->vars()->get('phpMin'),
+                ],
+            ),
+            new ComposerTask(
+                require: [
                     'ergebnis/composer-normalize' => '^2.0',
                     'friendsofphp/php-cs-fixer' => '^2.17',
                 ],
                 dev: true,
-                update: true,
+                update: $repository->name() === 'phpactor',
             ),
-            new PhpProcessTask(
-                cmd: '/usr/local/bin/composer normalize'
-            ),
+            //new PhpProcessTask(
+            //    cmd: '/usr/local/bin/composer normalize'
+            //),
             new ConditionalTask(
                 predicate: fn () => $repository->name() === 'phpactor', // the extension manager conflicts with v2 plugins
                 task: new ComposerTask(

@@ -1,5 +1,6 @@
 {
     "vars": {
+        "phpMin": "^7.3",
         "composerLock": false,
         "checkoutOptions": {},
         "defaultBranch": "master",
