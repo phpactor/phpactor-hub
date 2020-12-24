@@ -110,7 +110,6 @@ class PHPUnitPipeline extends BasePipeline
                         'PHPUNIT_80',
                     ],
                     'rules' => [
-            //            'Rector\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector'
                     ]
                 ]
             ),
@@ -144,7 +143,6 @@ class PHPUnitPipeline extends BasePipeline
                         'PHPUNIT_91',
                     ],
                     'rules' => [
-            //            'Rector\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector'
                     ]
                 ]
             ),
