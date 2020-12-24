@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpactorHub\Pipeline;
+namespace PhpactorHub\Pipeline\Survey;
 
 use Maestro\Core\Inventory\MainNode;
 use Maestro\Core\Inventory\RepositoryNode;
@@ -12,7 +12,7 @@ use Maestro\Core\Task\SetReportingGroupTask;
 use Maestro\Core\Task\Task;
 use PhpactorHub\Pipeline\Task\GithubActionSurveyTask;
 
-class GithubActionsSurvey implements Pipeline
+class GithubActions implements Pipeline
 {
     public function build(MainNode $mainNode): Task
     {

@@ -17,6 +17,7 @@ use Maestro\Core\Task\Task;
 use Maestro\Core\Task\TemplateTask;
 use PhpactorHub\Pipeline\BasePipeline;
 use PhpactorHub\Pipeline\Task\CommitAndPrTask;
+use PhpactorHub\Pipeline\Task\ComposerBumpVersionIfPresentTask;
 use Rector\Set\ValueObject\SetList;
 
 class PHPUnitPipeline extends BasePipeline
@@ -37,18 +38,10 @@ class PHPUnitPipeline extends BasePipeline
     private function upgradePhpunit(RepositoryNode $repository): Task
     {
         return new SequentialTask([
-            new ConditionalTask(
-                predicate: function (Context $context) {
-                    return $context->fact(ComposerJsonFact::class)->packages()->has('symfony/filesystem');
-                },
-                task: new ComposerTask(
-                    require: [
-                        'symfony/filesystem' => '^4.2 || ^5.0',
-                    ],
-                    update: false,
-                    dev: true
-                )
-            ),
+            new ComposerBumpVersionIfPresentTask('symfony/filesystem', '^4.2 || ^5.0', true),
+            new ComposerBumpVersionIfPresentTask('symfony/filesystem', '^4.2 || ^5.0', false),
+            new ComposerBumpVersionIfPresentTask('symfony/console', '^4.3 || ^5.1', true),
+            new ComposerBumpVersionIfPresentTask('symfony/console', '^4.3 || ^5.1', false),
             new ProcessTask(
                 cmd: 'git checkout -b ' . $repository->vars()->get('branch')
             ),
@@ -158,6 +151,7 @@ class PHPUnitPipeline extends BasePipeline
             new ComposerTask(
                 require: [
                     'phpunit/phpunit' => '^9.0',
+                    'phpspec/prophecy-phpunit' => '^2.0',
                 ],
                 dev: true,
                 update: true
