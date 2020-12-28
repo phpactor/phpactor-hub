@@ -17,6 +17,7 @@ class PackageVersions extends BasePipeline
                 'phpunit/phpunit',
                 'friendsofphp/php-cs-fixer',
                 'phpstan/phpstan',
+                'phpbench/phpbench',
             ]
         );
     }

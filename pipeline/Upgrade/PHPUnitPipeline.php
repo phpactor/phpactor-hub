@@ -85,15 +85,15 @@ class PHPUnitPipeline extends BasePipeline
                 dev: true
             ),
             new GitDiffTask(),
-            new CommitAndPrTask(
-                message: 'Maestro updates to PHPUnit 9.0',
-                paths: [
-                    '.gitignore',
-                    'composer.json',
-                    'phpunit.xml.dist',
-                    'tests'
-                ]
-            ),
+            //new CommitAndPrTask(
+            //    message: 'Maestro updates to PHPUnit 9.0',
+            //    paths: [
+            //        '.gitignore',
+            //        'composer.json',
+            //        'phpunit.xml.dist',
+            //        'tests'
+            //    ]
+            //),
         ]);
     }
 

@@ -1,19 +1,18 @@
 <?php
 
-namespace PhpactorHub\Pipeline\Survey;
+namespace PhpactorHub\Pipeline\Maintain;
 
 use Maestro\Core\Inventory\MainNode;
 use Maestro\Core\Inventory\RepositoryNode;
 use Maestro\Core\Pipeline\Pipeline;
-use Maestro\Core\Task\JsonApiSurveyTask;
 use Maestro\Core\Task\ParallelTask;
 use Maestro\Core\Task\SequentialTask;
 use Maestro\Core\Task\SetReportingGroupTask;
 use Maestro\Core\Task\Task;
-use PhpactorHub\Pipeline\Task\GithubActionSurveyTask;
+use PhpactorHub\Pipeline\BasePipeline;
 use PhpactorHub\Pipeline\Task\RerunTask;
 
-class GithubActions implements Pipeline
+class GithubWorkflowReRunPipeline implements Pipeline
 {
     public function build(MainNode $mainNode): Task
     {
@@ -22,11 +21,8 @@ class GithubActions implements Pipeline
             return new SequentialTask(array_merge([
                 new SetReportingGroupTask($repositoryNode->name())
             ], [
-                new GithubActionSurveyTask(
-                    repo: 'phpactor/' . $repositoryNode->name(),
-                    defaultBranch: $repositoryNode->vars()->get('branch'),
-                    githubUsername: $repositoryNode->vars()->get('secret.githubUsername'),
-                    githubAuthToken: $repositoryNode->vars()->get('secret.githubAuthToken'),
+                new RerunTask(
+                    $repositoryNode
                 )
             ]));
         }, $mainNode->selectedRepositories())));

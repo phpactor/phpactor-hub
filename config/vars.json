@@ -1,7 +1,5 @@
 {
     "vars": {
-        "phpMin": "^7.3",
-        "composerLock": false,
         "checkoutOptions": {},
         "defaultBranch": "master",
         "jobs": [
@@ -11,6 +9,15 @@
         ],
         "branches": [
             "master"
-        ]
+        ],
+        "phpbench.enable": false,
+        "workflow.matrix.php": [ "7.3", "7.4"],
+        "composer.lock": false,
+        "composer.require.php": "^7.3",
+        "composer.requireDev.intersection": {
+            "ergebnis/composer-normalize": "^2.0",
+            "friendsofphp/php-cs-fixer": "^2.17",
+            "phpbench/phpbench": "^1.0.0-alpha3"
+        }
     }
 }

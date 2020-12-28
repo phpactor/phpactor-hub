@@ -18,7 +18,9 @@ class ClosePrPipeline extends BasePipeline
     protected function buildRepository(RepositoryNode $repository): Task
     {
         return new SequentialTask([
-            new GithubPrCloseTask('phpunit-upgrade')
+            new GithubPrCloseTask(
+                $repository->vars()->get('branch')
+            )
         ]);
     }
 }

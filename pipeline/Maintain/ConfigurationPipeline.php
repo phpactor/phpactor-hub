@@ -13,11 +13,12 @@ use Maestro\Core\Task\ProcessTask;
 use Maestro\Core\Task\SequentialTask;
 use Maestro\Core\Task\Task;
 use PhpactorHub\Pipeline\BasePipeline;
+use PhpactorHub\Pipeline\Task\CommitAndPrTask;
 use PhpactorHub\Pipeline\Task\GithubWorkflowUpdateTask;
 
 class ConfigurationPipeline extends BasePipeline
 {
-    const MESSAGE = 'Maestro updates minimum PHP to 7.3';
+    const MESSAGE = 'Maestro routine maintainence';
 
     protected function buildRepository(RepositoryNode $repository): Task
     {
@@ -32,37 +33,23 @@ class ConfigurationPipeline extends BasePipeline
             ),
             new ComposerTask(
                 require: [
-                    'php' => $repository->vars()->get('phpMin'),
+                    'php' => $repository->vars()->get('composer.require.php'),
                 ],
             ),
             new ComposerTask(
-                require: [
-                    'ergebnis/composer-normalize' => '^2.0',
-                    'friendsofphp/php-cs-fixer' => '^2.17',
-                ],
+                require: $repository->vars()->get('composer.requireDev.intersection'),
+                intersection: true,
                 dev: true,
-                update: $repository->name() === 'phpactor',
+                update: $repository->vars()->get('composer.lock')
             ),
-            //new PhpProcessTask(
-            //    cmd: '/usr/local/bin/composer normalize'
-            //),
             new ConditionalTask(
-                predicate: fn () => $repository->name() === 'phpactor', // the extension manager conflicts with v2 plugins
-                task: new ComposerTask(
-                    remove: [
-                        'ergebnis/composer-normalize'
-                    ],
-                    dev: true,
-                    update: true
-                )
+                predicate: fn () => $repository->vars()->get('composer.lock'),
+                task: new ComposerTask(update: true)
             ),
-            new GitDiffTask(),
-            new ProcessTask(
-                cmd: 'git checkout -b ' . $repository->vars()->get('branch')
-            ),
-            new GitCommitTask(
+            new CommitAndPrTask(
+                repository: $repository,
                 paths: (function (array $paths) use ($repository) {
-                    if ($repository->vars()->get('composerLock')) {
+                    if ($repository->vars()->get('composer.lock')) {
                         $paths[] = 'composer.lock';
                     }
 
@@ -71,14 +58,7 @@ class ConfigurationPipeline extends BasePipeline
                     '.github',
                     'composer.json',
                 ]),
-                message: self::MESSAGE
-            ),
-            new ProcessTask(
-                cmd: 'git push origin HEAD -f',
-            ),
-            new ProcessTask(
-                cmd: sprintf('gh pr create --fill -t "%s"', self::MESSAGE),
-                allowFailure: true
+                message: $repository->vars()->getOrNull('commit.message')
             ),
         ]);
     }

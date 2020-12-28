@@ -4,7 +4,8 @@
             "name": "phpactor",
             "url": "git@github.com:phpactor/phpactor",
             "vars": {
-                "composerLock": true,
+                "phpbench.enable": true,
+                "composer.lock": true,
                 "defaultBranch": "develop",
                 "branches": [
                     "master",
@@ -58,6 +59,7 @@
             "name": "completion",
             "url": "git@github.com:phpactor/completion",
             "vars": {
+                "phpbench.enable": true,
                 "checkoutOptions": {
                     "fetch-depth": 0
                 }
@@ -88,7 +90,8 @@
             "name": "config-loader",
             "url": "git@github.com:phpactor/config-loader",
             "vars": {
-                "phpMin": "^7.3 || ^8.0"
+                "phpbench.enable": true,
+                "composer.require.php": "^7.3 || ^8.0"
             },
             "tags": ["lib"]
         },
@@ -101,7 +104,7 @@
             "name": "container",
             "url": "git@github.com:phpactor/container",
             "vars": {
-                "phpMin": "^7.3 || ^8.0"
+                "composer.require.php": "^7.3 || ^8.0"
             },
             "tags": ["lib"]
         },
@@ -123,7 +126,10 @@
         {
             "name": "file-path-resolver",
             "url": "git@github.com:phpactor/file-path-resolver",
-            "tags": ["lib"]
+            "tags": ["lib"],
+            "vars": {
+                "phpbench.enable": true
+            }
         },
         {
             "name": "file-path-resolver-extension",
@@ -133,7 +139,10 @@
         {
             "name": "indexer-extension",
             "url": "git@github.com:phpactor/indexer-extension",
-            "tags": ["ext"]
+            "tags": ["ext"],
+            "vars": {
+                "phpbench.enable": true
+            }
         },
         {
             "name": "language-server",
@@ -148,7 +157,10 @@
         {
             "name": "language-server-phpactor-extensions",
             "url": "git@github.com:phpactor/language-server-phpactor-extensions",
-            "tags": ["ext"]
+            "tags": ["ext"],
+            "vars": {
+                "phpbench.enable": true
+            }
         },
         {
             "name": "language-server-protocol",
@@ -170,7 +182,7 @@
             "name": "map-resolver",
             "url": "git@github.com:phpactor/map-resolver",
             "vars": {
-                "phpMin": "^7.3 || ^8.0"
+                "composer.require.php": "^7.3 || ^8.0"
             },
             "tags": ["lib"]
         },
@@ -242,7 +254,10 @@
         {
             "name": "worse-reflection",
             "url": "git@github.com:phpactor/worse-reflection",
-            "tags": ["lib"]
+            "tags": ["lib"],
+            "vars": {
+                "phpbench.enable": true
+            }
         },
         {
             "name": "worse-reflection-extension",

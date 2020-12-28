@@ -15,6 +15,7 @@ use Maestro\Core\Task\Task;
 use Maestro\Core\Task\TemplateTask;
 use Maestro\Core\Task\YamlTask;
 use PhpactorHub\Pipeline\BasePipeline;
+use PhpactorHub\Pipeline\Task\GithubActionsTask;
 
 class GithubActionsPipeline extends BasePipeline
 {
@@ -41,17 +42,7 @@ class GithubActionsPipeline extends BasePipeline
                 regexp: '{Build Status.*travis}',
                 line: sprintf('![CI](https://github.com/phpactor/%s/workflows/CI/badge.svg)', $repository->name()),
             ),
-            new TemplateTask(
-                template: 'github/workflow.yml.twig',
-                target: '.github/workflows/ci.yml',
-                overwrite: true,
-                vars: [
-                    'name' => 'CI',
-                    'repo' => $repository,
-                    'jobs' => $repository->vars()->get('jobs'),
-                    'branches' => $repository->vars()->get('branches'),
-                ]
-            ),
+            new GithubActionsTask($repository),
             new CatTask(
                 path: '.github/workflows/ci.yml'
             ),

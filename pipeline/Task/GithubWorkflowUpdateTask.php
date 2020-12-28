@@ -28,10 +28,17 @@ class GithubWorkflowUpdateTask implements DelegateTask
                 vars: [
                     'name' => 'CI',
                     'repo' => $this->repository,
-                    'jobs' => $this->repository->vars()->get('jobs'),
+                    'jobs' => (function (array $jobs) {
+                        if ($this->repository->vars()->get('phpbench.enable')) {
+                            $jobs[] = 'phpbench';
+                        }
+                        return $jobs;
+                    })($this->repository->vars()->get('jobs')),
                     'branches' => $this->repository->vars()->get('branches'),
                     'checkoutOptions' => $this->repository->vars()->get('checkoutOptions'),
-                ]
+                    'phpMin' => (fn (array $versions) => reset($versions))($this->repository->vars()->get('workflow.matrix.php')),
+                    'workflowMatrixPhp' => $this->repository->vars()->get('workflow.matrix.php'),
+                ],
             ),
         ]);
     }

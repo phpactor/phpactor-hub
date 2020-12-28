@@ -6,8 +6,9 @@
         strategy:
             matrix:
                 php-version:
-                    - '7.3'
-                    - '7.4'
+{% for version in workflowMatrixPhp %}
+                    - '{{ version }}'
+{% endfor %}
 
         steps:
 {% include "github/steps/step/checkout-code.yml.twig" %}

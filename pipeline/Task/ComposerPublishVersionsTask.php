@@ -23,7 +23,7 @@ class ComposerPublishVersionsTask implements DelegateTask
     {
         return new SequentialTask([
             new ComposerTask(),
-            new ClosureTask(function (array $_, Context $context) {
+            new ClosureTask(function (Context $context) {
                 $composerJson = $context->fact(ComposerJsonFact::class);
                 $publisher = $context->service(TaskReportPublisher::class);
                 assert($composerJson instanceof ComposerJsonFact);
@@ -37,7 +37,7 @@ class ComposerPublishVersionsTask implements DelegateTask
                     $row[$package->name()] = $package->version();
                     return $row;
                 }, []));
-                return new Success($context);
+                return $context;
             })
         ]);
     }

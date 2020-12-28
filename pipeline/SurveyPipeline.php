@@ -6,7 +6,7 @@ use Maestro\Core\Task\GitSurveyTask;
 use Maestro\Core\Task\JsonApiSurveyTask;
 use Maestro\Core\Task\ParallelTask;
 use Maestro\Core\Task\Task;
-use PhpactorHub\Pipeline\Task\GithubActionSurveyTask;
+use PhpactorHub\Pipeline\Task\RerunTask;
 
 class SurveyPipeline extends BasePipeline
 {
@@ -14,7 +14,7 @@ class SurveyPipeline extends BasePipeline
     {
         return new ParallelTask([
             new GitSurveyTask(),
-            new GithubActionSurveyTask(
+            new RerunTask(
                 defaultBranch: $repository->vars()->get('branch'),
             ),
         ]);
