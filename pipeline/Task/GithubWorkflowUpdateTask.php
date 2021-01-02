@@ -33,9 +33,9 @@ class GithubWorkflowUpdateTask implements DelegateTask
                             $jobs[] = 'phpbench';
                         }
                         return $jobs;
-                    })($this->repository->vars()->get('jobs')),
-                    'branches' => $this->repository->vars()->get('branches'),
-                    'checkoutOptions' => $this->repository->vars()->get('checkoutOptions'),
+                    })($this->repository->vars()->get('workflow.jobs')),
+                    'branches' => $this->repository->vars()->get('workflow.branches'),
+                    'checkoutOptions' => $this->repository->vars()->get('workflow.checkoutOptions'),
                     'phpMin' => (fn (array $versions) => reset($versions))($this->repository->vars()->get('workflow.matrix.php')),
                     'workflowMatrixPhp' => $this->repository->vars()->get('workflow.matrix.php'),
                 ],

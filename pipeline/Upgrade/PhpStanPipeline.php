@@ -4,7 +4,7 @@ namespace PhpactorHub\Pipeline\Upgrade;
 
 use Maestro\Core\Inventory\RepositoryNode;
 use Maestro\Core\Process\ProcessResult;
-use Maestro\Core\Task\ComposerTask;
+use Maestro\Composer\Task\ComposerTask;
 use Maestro\Core\Task\ConditionalTask;
 use Maestro\Core\Task\Context;
 use Maestro\Core\Task\GitCommitTask;
@@ -31,10 +31,9 @@ class PhpStanPipeline extends BasePipeline
                 },
             ),
             new ComposerTask(
-                require: [
+                requireDev: [
                     'phpstan/phpstan' => self::VERSION,
                 ],
-                dev: true,
                 update: true,
             ),
             $this->phpstanTask($repository, true),

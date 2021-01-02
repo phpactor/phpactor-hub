@@ -1,23 +1,32 @@
 {
     "vars": {
-        "checkoutOptions": {},
-        "defaultBranch": "master",
-        "jobs": [
+        "php.bin": "php7.3",
+
+        "version": "",
+
+        "workflow.checkoutOptions": {},
+        "workflow.matrix.php": [ "7.3", "7.4"],
+        "workflow.jobs": [
             "php-cs-fixer",
             "phpstan",
             "phpunit"
         ],
-        "branches": [
+        "workflow.branches": [
             "master"
         ],
+
         "phpbench.enable": false,
-        "workflow.matrix.php": [ "7.3", "7.4"],
+
         "composer.lock": false,
         "composer.require.php": "^7.3",
+        "composer.satisfactory": true,
         "composer.requireDev.intersection": {
             "ergebnis/composer-normalize": "^2.0",
             "friendsofphp/php-cs-fixer": "^2.17",
             "phpbench/phpbench": "^1.0.0-alpha3"
+        },
+        "composer.require.intersection": {
+            "symfony/console": "^5.0"
         }
     }
 }

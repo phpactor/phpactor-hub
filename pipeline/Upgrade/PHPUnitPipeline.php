@@ -38,18 +38,13 @@ class PHPUnitPipeline extends BasePipeline
     private function upgradePhpunit(RepositoryNode $repository): Task
     {
         return new SequentialTask([
-            new ComposerBumpVersionIfPresentTask('symfony/filesystem', '^4.2 || ^5.0', true),
-            new ComposerBumpVersionIfPresentTask('symfony/filesystem', '^4.2 || ^5.0', false),
-            new ComposerBumpVersionIfPresentTask('symfony/console', '^4.3 || ^5.1', true),
-            new ComposerBumpVersionIfPresentTask('symfony/console', '^4.3 || ^5.1', false),
-            new ProcessTask(
-                cmd: 'git checkout -b ' . $repository->vars()->get('branch')
-            ),
+            new ComposerBumpVersionIfPresentTask('symfony/filesystem', '^4.2 || ^5.0'),
+            new ComposerBumpVersionIfPresentTask('symfony/console', '^4.3 || ^5.1'),
+            new ComposerBumpVersionIfPresentTask('symfony/yaml', '^4.3 || ^5.1'),
             new ComposerTask(
-                require: [
+                requireDev: [
                     'rector/rector' => '0.8.52',
                 ],
-                dev: true,
                 update: true
             ),
             new ConditionalTask(
@@ -82,18 +77,20 @@ class PHPUnitPipeline extends BasePipeline
                 remove: [
                     'rector/rector',
                 ],
-                dev: true
+                update: true
             ),
             new GitDiffTask(),
-            //new CommitAndPrTask(
-            //    message: 'Maestro updates to PHPUnit 9.0',
-            //    paths: [
-            //        '.gitignore',
-            //        'composer.json',
-            //        'phpunit.xml.dist',
-            //        'tests'
-            //    ]
-            //),
+            new CommitAndPrTask(
+                repository: $repository,
+                message: 'Maestro updates to PHPUnit 9.0',
+                paths: [
+                    'composer.lock',
+                    '.gitignore',
+                    'composer.json',
+                    'phpunit.xml.dist',
+                    'tests'
+                ]
+            ),
         ]);
     }
 
@@ -122,11 +119,10 @@ class PHPUnitPipeline extends BasePipeline
                 allowFailure: true
             ),
             new ComposerTask(
-                require: [
+                requireDev: [
                     'phpunit/phpunit' => '^8.0',
                 ],
-                dev: true,
-                update: true
+                update: true,
             ),
         ]);
     }
@@ -147,11 +143,17 @@ class PHPUnitPipeline extends BasePipeline
                 ]
             ),
             new ComposerTask(
-                require: [
+                requireDev: [
+                    'sebastian/diff' => '^4.0',
                     'phpunit/phpunit' => '^9.0',
                     'phpspec/prophecy-phpunit' => '^2.0',
                 ],
-                dev: true,
+                intersection: true,
+            ),
+            new ComposerTask(
+                requireDev: [
+                    'phpspec/prophecy-phpunit' => '^2.0',
+                ],
                 update: true
             ),
             new ProcessTask(

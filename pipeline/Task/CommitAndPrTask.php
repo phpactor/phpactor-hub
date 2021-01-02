@@ -30,11 +30,12 @@ class CommitAndPrTask implements DelegateTask
             ),
             new GitDiffTask(),
             new ConditionalTask(
-                predicate: fn (Context $context) => !empty(trim($context->result()->stdOut())),
+                message: 'Not committing and creating PR as either there is nothing to commit, or the commit message is empty',
+                predicate: fn (Context $context) => $this->message && !empty(trim($context->result()->stdOut())),
                 task: new SequentialTask([
                     new GitCommitTask(
                         paths: $this->paths,
-                        message: $this->message,
+                        message: $this->message ?? '',
                     ),
                     new ProcessTask(
                         cmd: 'git push origin HEAD -f',

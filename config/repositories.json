@@ -6,19 +6,20 @@
             "vars": {
                 "phpbench.enable": true,
                 "composer.lock": true,
-                "defaultBranch": "develop",
-                "branches": [
+                "composer.satisfactory": false,
+                "workflow.branches": [
                     "master",
                     "develop"
                 ],
-                "jobs": [
+                "workflow.jobs": [
                     "phpactor-vim",
                     "phpunit",
                     "phpactor-deps-and-exts",
                     "phpactor-docs"
                 ]
             },
-            "tags": ["phpactor"]
+            "tags": ["phpactor"],
+            "version": "develop"
         },
         {
             "name": "amp-fswatch",
@@ -81,7 +82,7 @@
             "url": "git@github.com:phpactor/completion",
             "vars": {
                 "phpbench.enable": true,
-                "checkoutOptions": {
+                "workflow.checkoutOptions": {
                     "fetch-depth": 0
                 },
                 "version": "0.4.3"
@@ -117,7 +118,7 @@
             "url": "git@github.com:phpactor/composer-autoloader-extension",
             "tags": ["ext"],
             "vars": {
-                "version": "0.2.2"
+                "version": "0.2.3"
             }
         },
         {
@@ -143,7 +144,7 @@
             "url": "git@github.com:phpactor/container",
             "vars": {
                 "composer.require.php": "^7.3 || ^8.0",
-                "version": "0.3.4"
+                "version": "1.3.4"
             },
             "tags": ["lib"]
         },
@@ -227,7 +228,7 @@
             "url": "git@github.com:phpactor/language-server-protocol",
             "vars": {
                 "version": "0.1.1",
-                "jobs": [
+                "workflow.jobs": [
                     "phpstan",
                     "phpunit"
                 ]
@@ -348,7 +349,7 @@
             }
         },
         {
-            "name": "worse-reference-finder",
+            "name": "worse-reference-finders",
             "url": "git@github.com:phpactor/worse-reference-finder",
             "tags": ["lib"],
             "vars": {
