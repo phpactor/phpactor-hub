@@ -2,7 +2,7 @@
 
 namespace PhpactorHub\Pipeline\Upgrade;
 
-use Maestro\Composer\Fact\ComposerJsonFact;
+use Maestro\Composer\Fact\ComposerFact;
 use Maestro\Composer\Task\ComposerTask;
 use Maestro\Core\Task\ConditionalTask;
 use Maestro\Core\Task\Context;
@@ -28,8 +28,8 @@ class PHPUnitPipeline extends BasePipeline
             new ComposerTask(),
             new ConditionalTask(
                 fn (Context $context) => $context->fact(
-                    ComposerJsonFact::class
-                )->packages()->get('phpunit/phpunit')->version()->lessThan('^9.0'),
+                    ComposerFact::class
+                )->json()->packages()->get('phpunit/phpunit')->version()->lessThan('^9.0'),
                 $this->upgradePhpunit($repository)
             )
         ]);
@@ -49,8 +49,8 @@ class PHPUnitPipeline extends BasePipeline
             ),
             new ConditionalTask(
                 fn (Context $context) => $context->fact(
-                    ComposerJsonFact::class
-                )->packages()->get('phpunit/phpunit')->version()->lessThan('^8.0'),
+                    ComposerFact::class
+                )->json()->packages()->get('phpunit/phpunit')->version()->lessThan('^8.0'),
                 $this->migrateToPhpUnit8()
             ),
             $this->migrateToPhpUnit9(),

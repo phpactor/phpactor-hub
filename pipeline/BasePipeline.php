@@ -2,7 +2,6 @@
 
 namespace PhpactorHub\Pipeline;
 
-use Maestro\Composer\Task\ComposerJsonFactTask;
 use Maestro\Core\Fact\PhpFact;
 use Maestro\Core\Inventory\MainNode;
 use Maestro\Core\Inventory\RepositoryNode;

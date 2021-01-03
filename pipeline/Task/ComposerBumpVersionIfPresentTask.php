@@ -2,7 +2,7 @@
 
 namespace PhpactorHub\Pipeline\Task;
 
-use Maestro\Composer\Fact\ComposerJsonFact;
+use Maestro\Composer\Fact\ComposerFact;
 use Maestro\Composer\Task\ComposerTask;
 use Maestro\Core\Task\ConditionalTask;
 use Maestro\Core\Task\Context;
@@ -47,7 +47,7 @@ class ComposerBumpVersionIfPresentTask implements DelegateTask
     {
         return new SequentialTask(array_map(fn (bool $dev) => new ConditionalTask(
             predicate: function (Context $context) use ($dev) {
-                $packages = $context->fact(ComposerJsonFact::class)->packages();
+                $packages = $context->fact(ComposerFact::class)->json()->packages();
                 return 
                     $packages->has($this->package) &&
                     $packages->get($this->package)->dev() === $dev;

@@ -4,7 +4,7 @@ namespace PhpactorHub\Pipeline\Task;
 
 use Amp\Success;
 use Maestro\Composer\ComposerPackage;
-use Maestro\Composer\Fact\ComposerJsonFact;
+use Maestro\Composer\Fact\ComposerFact;
 use Maestro\Composer\Task\ComposerTask;
 use Maestro\Core\Report\TaskReportPublisher;
 use Maestro\Core\Task\ClosureTask;
@@ -24,13 +24,13 @@ class ComposerPublishVersionsTask implements DelegateTask
         return new SequentialTask([
             new ComposerTask(),
             new ClosureTask(function (Context $context) {
-                $composerJson = $context->fact(ComposerJsonFact::class);
+                $composer = $context->fact(ComposerFact::class);
                 $publisher = $context->service(TaskReportPublisher::class);
-                assert($composerJson instanceof ComposerJsonFact);
+                assert($composer instanceof ComposerFact);
                 assert($publisher instanceof TaskReportPublisher);
 
-                $packages = array_map(function (string $name) use ($composerJson) {
-                    return $composerJson->packages()->get($name);
+                $packages = array_map(function (string $name) use ($composer) {
+                    return $composer->json()->packages()->get($name);
                 }, $this->packages);
 
                 $publisher->publishTableRow(array_reduce($packages, function (array $row, ComposerPackage $package) {

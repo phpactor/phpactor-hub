@@ -2,9 +2,13 @@
 
 namespace PhpactorHub\Pipeline;
 
+use Composer\Semver\VersionParser;
 use Maestro\Composer\Task\ComposerTask;
 use Maestro\Core\Inventory\RepositoryNode;
+use Maestro\Core\Queue\TaskRunner;
+use Maestro\Core\Task\ClosureTask;
 use Maestro\Core\Task\ConditionalTask;
+use Maestro\Core\Task\Context;
 use Maestro\Core\Task\FileTask;
 use Maestro\Core\Task\GitCommitTask;
 use Maestro\Core\Task\GitDiffTask;
@@ -13,10 +17,12 @@ use Maestro\Core\Task\PhpProcessTask;
 use Maestro\Core\Task\ProcessTask;
 use Maestro\Core\Task\SequentialTask;
 use Maestro\Core\Task\Task;
+use Maestro\Core\Task\TaskContext;
 use Maestro\Markdown\Task\MarkdownSectionTask;
 use PhpactorHub\Pipeline\BasePipeline;
 use PhpactorHub\Pipeline\Task\CommitAndPrTask;
 use PhpactorHub\Pipeline\Task\GithubWorkflowUpdateTask;
+use function Amp\call;
 
 /**
  * This is the main idempotent pipeline.
@@ -88,7 +94,39 @@ class MainPipeline extends BasePipeline
                 requireDev: $repository->vars()->get('composer.requireDev.intersection'),
                 intersection: true,
                 satisfactory: $repository->vars()->get('composer.satisfactory'),
+                runScripts: false
             ),
+
+            // Ensure the branch-alias corresponds to the potentially untagged
+            // "next" version.
+            new ClosureTask(function (Context $context) use ($repository) {
+                return call(function () use ($context, $repository) {
+                    $version = $repository->vars()->get('version');
+
+                    if (!$version) {
+                        return $context;
+                    }
+
+                    $alias = preg_replace('{([0-9]+).([0-9]+).[0-9]+}', '\1.\2.x-dev', $version);
+
+                    if ($alias === $version || $alias === null) {
+                        return $context;
+                    }
+
+                    $result = yield $context->service(TaskRunner::class)->enqueue(new TaskContext(new JsonMergeTask(
+                        path: 'composer.json',
+                        data: [
+                            'extra' => [
+                                'branch-alias' => [
+                                    'dev-master' => $alias
+                                ],
+                            ]
+                        ],
+                    ), $context));
+
+                    return $context;
+                });
+            }),
 
             // If the package is configured with a composer.lock, update it
             new ConditionalTask(

@@ -2,7 +2,7 @@
 
 namespace PhpactorHub\Pipeline\Survey;
 
-use Maestro\Composer\Fact\ComposerJsonFact;
+use Maestro\Composer\Fact\ComposerFact;
 use Maestro\Composer\Task\ComposerTask;
 use Maestro\Core\Inventory\MainNode;
 use Maestro\Core\Inventory\RepositoryNode;
@@ -22,9 +22,10 @@ class GitSurvey extends BasePipeline
         return new SequentialTask([
             new ComposerTask(),
             new ClosureTask(function (Context $context) use ($repository) {
-                $composer = $context->fact(ComposerJsonFact::class);
-                assert($composer instanceof ComposerJsonFact);
+                $composer = $context->fact(ComposerFact::class);
+                assert($composer instanceof ComposerFact);
                 $context->service(TaskReportPublisher::class)->publishTableRow([
+                    'alias' => implode(',', $context->fact(ComposerFact::class)->json()->branchAliases()),
                     'next' => $repository->vars()->get('version')
                 ]);
 
