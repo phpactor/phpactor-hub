@@ -45,6 +45,9 @@ class PHPUnitPipeline extends BasePipeline
                 requireDev: [
                     'rector/rector' => '0.8.52',
                 ],
+                update: false
+            ),
+            new ComposerTask(
                 update: true
             ),
             new ConditionalTask(
@@ -117,6 +120,10 @@ class PHPUnitPipeline extends BasePipeline
                     'php7.3 ./vendor/bin/rector process -- tests'
                 ],
                 allowFailure: true
+            ),
+            new FileTask(
+                path: 'composer.lock',
+                exists: false
             ),
             new ComposerTask(
                 requireDev: [

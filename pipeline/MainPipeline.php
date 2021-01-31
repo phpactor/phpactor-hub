@@ -13,11 +13,14 @@ use Maestro\Core\Task\FileTask;
 use Maestro\Core\Task\GitCommitTask;
 use Maestro\Core\Task\GitDiffTask;
 use Maestro\Core\Task\JsonMergeTask;
+use Maestro\Core\Task\LineInFileTask;
+use Maestro\Core\Task\MapTask;
 use Maestro\Core\Task\PhpProcessTask;
 use Maestro\Core\Task\ProcessTask;
 use Maestro\Core\Task\SequentialTask;
 use Maestro\Core\Task\Task;
 use Maestro\Core\Task\TaskContext;
+use Maestro\Core\Task\TemplateTask;
 use Maestro\Markdown\Task\MarkdownSectionTask;
 use PhpactorHub\Pipeline\BasePipeline;
 use PhpactorHub\Pipeline\Task\CommitAndPrTask;
@@ -91,10 +94,31 @@ class MainPipeline extends BasePipeline
                         )
                     )
                 ),
+                intersection: true,
+                satisfactory: true,
+                runScripts: false
+            ),
+            new ComposerTask(
                 requireDev: $repository->vars()->get('composer.requireDev.intersection'),
                 intersection: true,
-                satisfactory: $repository->vars()->get('composer.satisfactory'),
+                satisfactory: false,
                 runScripts: false
+            ),
+
+            // Manage the gitignore file
+            new MapTask(
+                factory: fn (string $line) =>  new LineInFileTask(
+                    path: '.gitignore',
+                    line: $line,
+                    append: true
+                ),
+                array: $repository->vars()->get('git.ignore')
+            ),
+
+            // CS fixer config
+            new TemplateTask(
+                template: 'php-cs-fixer/php_cs.dist',
+                target: '.php_cs.dist',
             ),
 
             // Ensure the branch-alias corresponds to the potentially untagged
@@ -148,6 +172,8 @@ class MainPipeline extends BasePipeline
                     'README.md',
                     '.github',
                     'composer.json',
+                    '.php-cs.dist',
+                    '.gitignore',
                 ]),
                 message: $repository->vars()->getOrNull('commit.message')
             ),

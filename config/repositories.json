@@ -42,7 +42,10 @@
             "url": "git@github.com:phpactor/class-to-file",
             "tags": ["lib"],
             "vars": {
-                "version": "0.4.0"
+                "version": "0.4.0",
+                "php_cs_fixer.ignore": [
+                    "Integration/Composer/project"
+                ]
             }
         },
         {
@@ -371,6 +374,38 @@
             "tags": ["ext"],
             "vars": {
                 "version": "0.2.4"
+            }
+        },
+        {
+            "name": "phpspec-extension",
+            "url": "git@github.com:phpactor/phpspec-extension",
+            "tags": ["extra"],
+            "vars": {
+                "version": "0.1.0"
+            }
+        },
+        {
+            "name": "behat-extension",
+            "url": "git@github.com:phpactor/behat-extension",
+            "tags": ["extra"],
+            "vars": {
+                "version": "0.2.4"
+            }
+        },
+        {
+            "name": "phpunit-extension",
+            "url": "git@github.com:phpactor/phpunit-extension",
+            "tags": ["extra"],
+            "vars": {
+                "version": "0.1.1"
+            }
+        },
+        {
+            "name": "language-server-phpstan-extension",
+            "url": "git@github.com:phpactor/language-server-phpstan-extension",
+            "tags": ["extra"],
+            "vars": {
+                "version": "0.2.0"
             }
         }
     ]

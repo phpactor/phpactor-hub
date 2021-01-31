@@ -34,6 +34,9 @@ class PhpStanPipeline extends BasePipeline
                 requireDev: [
                     'phpstan/phpstan' => self::VERSION,
                 ],
+                update: false,
+            ),
+            new ComposerTask(
                 update: true,
             ),
             $this->phpstanTask($repository, true),
